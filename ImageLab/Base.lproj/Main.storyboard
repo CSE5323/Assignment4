@@ -89,12 +89,55 @@
                     <view key="view" contentMode="scaleToFill" id="o1d-Gk-okr">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rnd-3L-3Xf">
+                                <state key="normal" title="Toggle Flash"/>
+                                <connections>
+                                    <action selector="toggleFlash:" destination="jb1-d5-h2L" eventType="touchUpInside" id="QnC-43-rjn"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place your finger on the camera and turn on the flash" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MgR-Sq-dge">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="343" id="P6y-kZ-B6K"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Heart Rate:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FOZ-ky-azg">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pjH-mt-2S5">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="bpm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VRG-Hk-CtF">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="MgR-Sq-dge" firstAttribute="leading" secondItem="o1d-Gk-okr" secondAttribute="leadingMargin" id="3Vh-Q1-SbP"/>
+                            <constraint firstItem="pjH-mt-2S5" firstAttribute="baseline" secondItem="VRG-Hk-CtF" secondAttribute="baseline" id="FMS-Cc-U1F"/>
+                            <constraint firstAttribute="bottom" secondItem="Rnd-3L-3Xf" secondAttribute="bottom" constant="20" symbolic="YES" id="Fus-uq-yKK"/>
+                            <constraint firstItem="Rnd-3L-3Xf" firstAttribute="trailing" secondItem="o1d-Gk-okr" secondAttribute="trailingMargin" id="Pgm-IN-hNc"/>
+                            <constraint firstItem="VRG-Hk-CtF" firstAttribute="leading" secondItem="pjH-mt-2S5" secondAttribute="trailing" constant="8" symbolic="YES" id="QVx-Ik-c6s"/>
+                            <constraint firstItem="MgR-Sq-dge" firstAttribute="top" secondItem="Gt2-0c-SQJ" secondAttribute="bottom" constant="8" symbolic="YES" id="VsJ-oC-mth"/>
+                            <constraint firstItem="FOZ-ky-azg" firstAttribute="top" secondItem="MgR-Sq-dge" secondAttribute="bottom" constant="8" symbolic="YES" id="gf1-3a-Ifq"/>
+                            <constraint firstItem="FOZ-ky-azg" firstAttribute="baseline" secondItem="pjH-mt-2S5" secondAttribute="baseline" id="hP5-m2-6lf"/>
+                            <constraint firstItem="pjH-mt-2S5" firstAttribute="leading" secondItem="FOZ-ky-azg" secondAttribute="trailing" constant="8" symbolic="YES" id="pYQ-02-AIc"/>
+                            <constraint firstItem="FOZ-ky-azg" firstAttribute="leading" secondItem="MgR-Sq-dge" secondAttribute="leading" id="x87-bF-MaR"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="561-jE-ed9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="534" y="757"/>
+            <point key="canvasLocation" x="533.60000000000002" y="756.97151424287858"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="iXf-1p-swl">
