@@ -158,20 +158,20 @@ class ViewController: UIViewController   {
         }
     }
     
-    @IBAction func switchCamera(_ sender: AnyObject) {
-        self.videoManager.setFPS(desiredFrameRate: 5.0)
-
-        self.videoManager.toggleCameraPosition()
-    }
-    
-    @IBAction func setFlashLevel(_ sender: UISlider) {
-        if(sender.value>0.0){
-            self.videoManager.turnOnFlashwithLevel(sender.value)
-        }
-        else if(sender.value==0.0){
-            self.videoManager.turnOffFlash()
-        }
-    }
+//    @IBAction func switchCamera(_ sender: AnyObject) {
+//        self.videoManager.setFPS(desiredFrameRate: 5.0)
+//
+//        self.videoManager.toggleCameraPosition()
+//    }
+//    
+//    @IBAction func setFlashLevel(_ sender: UISlider) {
+//        if(sender.value>0.0){
+//            self.videoManager.turnOnFlashwithLevel(sender.value)
+//        }
+//        else if(sender.value==0.0){
+//            self.videoManager.turnOffFlash()
+//        }
+//    }
 
    
 }
