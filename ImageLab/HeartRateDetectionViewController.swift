@@ -29,38 +29,22 @@ class HeartRateDetectionViewController: UIViewController{
         //We're only using the back camera for this
         self.videoManager.setCameraPosition(AVCaptureDevicePosition.back)
         
-        self.videoManager.setProcessingBlock(self.processImage)
-        
         if !videoManager.isRunning{
             videoManager.start()
         }
         
+        //processing block to return the raw image
+        self.videoManager.setProcessingBlock(){(inputImage:CIImage)->(CIImage) in
+            //analyze the image for the amount of red in it
+            
+            return inputImage
+        }
+        
     }
     
-    //MARK: Process image output
-    func processImage(_ inputImage:CIImage) -> CIImage{
+    //These two overrides ensure there is only one video manager running at a time in our application
+    override func viewDidAppear(_ animated: Bool) {
         
-        var retImage = inputImage
-        
-        // if you just want to process on separate queue use this code
-        // this is a NON BLOCKING CALL, but any changes to the image in OpenCV cannot be displayed real time
-        //        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) { () -> Void in
-        //            self.bridge.setImage(retImage, withBounds: retImage.extent, andContext: self.videoManager.getCIContext())
-        //            self.bridge.processImage()
-        //        }
-        
-        // use this code if you are using OpenCV and want to overwrite the displayed image via OpenCv
-        // this is a BLOCKING CALL
-        //        self.bridge.setTransforms(self.videoManager.transform)
-        //        self.bridge.setImage(retImage, withBounds: retImage.extent, andContext: self.videoManager.getCIContext())
-        //        self.bridge.processImage()
-        //        retImage = self.bridge.getImage()
-
-        
-        self.bridge.processImage()
-        retImage = self.bridge.getImageComposite() // get back opencv processed part of the image (overlayed on original)
-        
-        return retImage
     }
     
     @IBAction func toggle_camera(_ sender: AnyObject) {
@@ -78,5 +62,9 @@ class HeartRateDetectionViewController: UIViewController{
     @IBAction func toggleFlash(_ sender: AnyObject) {
         self.videoManager.toggleFlash()
     }
+    
+    //MARK: Calculating Heart Rate and Displaying it
+    
+    
     
 }
