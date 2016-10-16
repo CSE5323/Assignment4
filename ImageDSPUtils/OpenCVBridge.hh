@@ -36,4 +36,7 @@
 
 -(void)loadHaarCascadeWithFilename:(NSString*)filename;
 
+//returns average value of red
+-(NSInteger)getAvgPixelIntensityRed;
+
 @end

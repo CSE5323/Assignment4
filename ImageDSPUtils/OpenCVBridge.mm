@@ -27,6 +27,17 @@ using namespace cv;
 #pragma mark ===Write Your Code Here===
 // alternatively you can subclass this class and override the process image function
 
+-(NSInteger)getAvgPixelIntensityRed{
+    cv::Mat frame_gray,image_copy;
+    Scalar avgPixelIntensity;
+    cv::Mat image = self.image;
+    
+    cvtColor(image, image_copy, CV_BGRA2BGR); // get rid of alpha for processing
+    avgPixelIntensity = cv::mean( image_copy );
+    
+    return avgPixelIntensity[0];
+}
+
 
 #pragma mark Define Custom Functions Here
 -(void)processImage{
@@ -75,7 +86,7 @@ using namespace cv;
             
             cvtColor(_image, image_copy, CV_BGRA2BGR); // get rid of alpha for processing
             avgPixelIntensity = cv::mean( image_copy );
-            sprintf(text,"Avg. B: %.0f, G: %.0f, R: %.0f", avgPixelIntensity.val[0],avgPixelIntensity.val[1],avgPixelIntensity.val[2]);
+            sprintf(text,"Avg. R: %.0f, G: %.0f, B: %.0f", avgPixelIntensity.val[0],avgPixelIntensity.val[1],avgPixelIntensity.val[2]);
             cv::putText(_image, text, cv::Point(0, 10), FONT_HERSHEY_PLAIN, 0.75, Scalar::all(255), 1, 2);
             break;
         }
