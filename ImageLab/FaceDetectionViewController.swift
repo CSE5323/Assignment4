@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 
 @available(iOS 10.0, *)
-class ViewController: UIViewController   {
+class FaceDetectionViewController: UIViewController   {
     
     //MARK: Class Properties
     var filters : [CIFilter]! = nil
