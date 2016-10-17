@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 
 @available(iOS 10.0, *)
-class ViewController: UIViewController   {
+class FaceDetectionViewController: UIViewController   {
     
     //MARK: Class Properties
     var filters : [CIFilter]! = nil
@@ -180,6 +180,14 @@ class ViewController: UIViewController   {
         
         //otherwise apply the filters to the faces
         return applyFiltersToFaces(inputImage: inputImage, features: f)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        if(self.videoManager.isRunning){
+            self.videoManager.turnOffFlash()
+            self.videoManager.stop()
+            self.videoManager.shutdown()
+        }
     }
 }
 

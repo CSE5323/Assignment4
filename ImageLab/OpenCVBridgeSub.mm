@@ -36,5 +36,21 @@ using namespace cv;
     
     self.image = image;
 }
+
+-(NSInteger)getAvgPixelIntensityRed{
+    cv::Mat image_copy;
+    Scalar avgPixelIntensity;
+    cv::Mat image = self.image;
+    
+    avgPixelIntensity = cv::mean( image );
+    NSInteger red = avgPixelIntensity.val[0];
+    
+    
+    char text[50];
+    sprintf(text,"Avg. R: %.0ld", (long)red);
+    cv::putText(image, text, cv::Point(0, 10), FONT_HERSHEY_PLAIN, 0.75, Scalar::all(255), 1, 2);
+    
+    return red;
+}
     
 @end
