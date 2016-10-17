@@ -23,32 +23,35 @@ using namespace cv;
 -(void)processImage{
     
     cv::Mat frame_gray,image_copy;
+    
+    // fine, adding scoping to case statements to get rid of jump errors
     char text[50];
     Scalar avgPixelIntensity;
     cv::Mat image = self.image;
     
     cvtColor(image, image_copy, CV_BGRA2BGR); // get rid of alpha for processing
     avgPixelIntensity = cv::mean( image_copy );
-    
-    
-    sprintf(text,"Avg. R: %.0f, G: %.0f, B: %.0f", avgPixelIntensity.val[0],avgPixelIntensity.val[1],avgPixelIntensity.val[2]);
-    cv::putText(image, text, cv::Point(0, 10), FONT_HERSHEY_PLAIN, 0.75, Scalar::all(255), 1, 2);
+    sprintf(text,"Avg. R: %.0f, G: %.0f, B: %.0f", avgPixelIntensity.val[2],avgPixelIntensity.val[1],avgPixelIntensity.val[0]);
+    cv::putText(image, text, cv::Point(80, 40), FONT_HERSHEY_PLAIN, 0.75, Scalar::all(255), 1, 2);
     
     self.image = image;
 }
 
 -(NSInteger)getAvgPixelIntensityRed{
-    cv::Mat image_copy;
+    cv::Mat frame_gray,image_copy;
+    
+    // fine, adding scoping to case statements to get rid of jump errors
+    char text[50];
     Scalar avgPixelIntensity;
     cv::Mat image = self.image;
     
-    avgPixelIntensity = cv::mean( image );
-    NSInteger red = avgPixelIntensity.val[0];
+    cvtColor(image, image_copy, CV_BGRA2BGR); // get rid of alpha for processing
+    avgPixelIntensity = cv::mean( image_copy );
+    sprintf(text,"Avg. R: %.0f, G: %.0f, B: %.0f", avgPixelIntensity.val[2],avgPixelIntensity.val[1],avgPixelIntensity.val[0]);
+    cv::putText(image, text, cv::Point(80, 40), FONT_HERSHEY_PLAIN, 0.75, Scalar::all(255), 1, 2);
+    NSInteger red = avgPixelIntensity.val[2];
     
-    
-    char text[50];
-    sprintf(text,"Avg. R: %.0ld", (long)red);
-    cv::putText(image, text, cv::Point(0, 10), FONT_HERSHEY_PLAIN, 0.75, Scalar::all(255), 1, 2);
+    self.image = image;
     
     return red;
 }

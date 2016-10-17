@@ -16,38 +16,76 @@ class HeartRateDetectionViewController: UIViewController{
     var videoManager:VideoAnalgesic! = nil
     let pinchFilterIndex = 2
     var detector:CIDetector! = nil
-    let bridge = OpenCVBridgeSub()
-    
+    let bridge = OpenCVBridge()
     @IBOutlet weak var heartRateLabel: UILabel!
     
     //MARK: ViewController Hierarchy
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.view.backgroundColor = nil
+        self.setupFilters()
+        
+        self.bridge.loadHaarCascade(withFilename: "nose")
         
         self.videoManager = VideoAnalgesic.sharedInstance
-        
-        //We're only using the back camera for this
         self.videoManager.setCameraPosition(AVCaptureDevicePosition.back)
         
+        // create dictionary for face detection
+        // HINT: you need to manipulate these proerties for better face detection efficiency
+        let optsDetector = [CIDetectorAccuracy:CIDetectorAccuracyLow,CIDetectorTracking:true] as [String : Any]
+        
+        // setup a face detector in swift
+        self.detector = CIDetector(ofType: CIDetectorTypeFace,
+                                   context: self.videoManager.getCIContext(), // perform on the GPU is possible
+            options: (optsDetector as [String : AnyObject]))
+        
         self.videoManager.setProcessingBlock(self.processImage)
+        
+        if !videoManager.isRunning{
+            videoManager.start()
+        }
+        
     }
     
     //MARK: Process image output
-    func processImage(inputImage:CIImage) -> CIImage{
-        return inputImage
+    func processImage(_ inputImage:CIImage) -> CIImage{
+        
+        
+        var retImage = inputImage
+        
+        //HINT: you can also send in the bounds of the face to ONLY process the face in OpenCV
+        // or any bounds to only process a certain bounding region in OpenCV
+        self.bridge.setTransforms(self.videoManager.transform)
+        self.bridge.setImage(retImage,
+                             withBounds: retImage.extent, // the first face bounds
+            andContext: self.videoManager.getCIContext())
+        retImage = self.bridge.getImageComposite() // get back opencv processed part of the image (overlayed on original)
+        
+        return retImage
+    }
+    
+    //MARK: Setup filtering
+    func setupFilters(){
+        filters = []
+        
+        let filterPinch = CIFilter(name:"CIBumpDistortion")!
+        filterPinch.setValue(-0.5, forKey: "inputScale")
+        filterPinch.setValue(75, forKey: "inputRadius")
+        filters.append(filterPinch)
+        
     }
     
     //MARK: Calculating heart rate
     func calculateHeartRate() {
         var heartRate: Int
         var redValues = [Int]()
-        let frameRate = 60 //I think it's 60??
+        let frameRate = 441
         var avgPeakIndexDifference = 0
         var meanOfChosenData = 0
         
         //recording average red values
-        for _ in 0..<280 {
+        for _ in 0..<1000 {
             self.videoManager.setProcessingBlock(self.processImage)
             redValues.append(self.bridge.getAvgPixelIntensityRed())
         }
@@ -60,7 +98,7 @@ class HeartRateDetectionViewController: UIViewController{
         var peakIndices = [Int]()
         //finding the peaks in the data
         for index in 0..<redValues.endIndex {
-            if isPeak(data: redValues, peakCandidate: index, maxRange: 5) {
+            if isPeak(data: redValues, peakCandidate: index, maxRange: 20) {
                 peakIndices.append(index)
             }
         }
