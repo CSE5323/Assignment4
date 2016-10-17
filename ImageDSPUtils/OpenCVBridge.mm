@@ -28,14 +28,7 @@ using namespace cv;
 // alternatively you can subclass this class and override the process image function
 
 -(NSInteger)getAvgPixelIntensityRed{
-    cv::Mat frame_gray,image_copy;
-    Scalar avgPixelIntensity;
-    cv::Mat image = self.image;
-    
-    cvtColor(image, image_copy, CV_BGRA2BGR); // get rid of alpha for processing
-    avgPixelIntensity = cv::mean( image_copy );
-    
-    return avgPixelIntensity[0];
+    return 0;
 }
 
 

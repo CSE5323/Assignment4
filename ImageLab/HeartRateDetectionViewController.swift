@@ -30,10 +30,12 @@ class HeartRateDetectionViewController: UIViewController{
         //We're only using the back camera for this
         self.videoManager.setCameraPosition(AVCaptureDevicePosition.back)
         
-        if !videoManager.isRunning{
-            videoManager.start()
-        }
-        
+        self.videoManager.setProcessingBlock(self.processImage)
+    }
+    
+    //MARK: Process image output
+    func processImage(inputImage:CIImage) -> CIImage{
+        return inputImage
     }
     
     //MARK: Calculating heart rate
@@ -45,8 +47,14 @@ class HeartRateDetectionViewController: UIViewController{
         var meanOfChosenData = 0
         
         //recording average red values
-        for _ in 0..<250 {
+        for _ in 0..<280 {
+            self.videoManager.setProcessingBlock(self.processImage)
             redValues.append(self.bridge.getAvgPixelIntensityRed())
+        }
+        
+        //to take out the values when the image is just white/yellow
+        for index in 0..<30 {
+            redValues.remove(at: index)
         }
         
         var peakIndices = [Int]()
@@ -88,12 +96,18 @@ class HeartRateDetectionViewController: UIViewController{
     func isPeak(data: [Int], peakCandidate: Int, maxRange: Int) -> Bool {
         var peak = peakCandidate
         var startIndex: Int
-        let endIndex = peakCandidate + maxRange
+        var endIndex: Int
         
         if peakCandidate < maxRange {
             startIndex = 0
         } else {
             startIndex = peakCandidate - maxRange
+        }
+        
+        if peakCandidate + maxRange < data.endIndex - 1 {
+            endIndex = peakCandidate + maxRange
+        } else {
+            endIndex = data.endIndex - 1
         }
         
         for index in startIndex...endIndex {
@@ -109,8 +123,11 @@ class HeartRateDetectionViewController: UIViewController{
         return false
     }
     
-    @IBAction func toggle_camera(_ sender: AnyObject) {
-        videoManager.toggleCameraPosition()
+    override func viewDidAppear(_ animated: Bool) {
+        if !self.videoManager.isRunning{
+            self.videoManager.start()
+        }
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -122,8 +139,9 @@ class HeartRateDetectionViewController: UIViewController{
     }
     
     @IBAction func toggleFlash(_ sender: AnyObject) {
-        self.videoManager.toggleFlash()
-        calculateHeartRate()
+        if self.videoManager.toggleFlash() {
+            calculateHeartRate()
+        }
     }
     
     

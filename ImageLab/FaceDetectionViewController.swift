@@ -181,5 +181,13 @@ class FaceDetectionViewController: UIViewController   {
         //otherwise apply the filters to the faces
         return applyFiltersToFaces(inputImage: inputImage, features: f)
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        if(self.videoManager.isRunning){
+            self.videoManager.turnOffFlash()
+            self.videoManager.stop()
+            self.videoManager.shutdown()
+        }
+    }
 }
 
