@@ -68,9 +68,9 @@ class FaceDetectionViewController: UIViewController   {
         self.face.setValue(CIColor(red: 1, green: 1, blue: 1, alpha: 0.0), forKey: "inputColor0")
         self.face.setValue(CIColor(red: 0.2, green: 2.0, blue: 0.2, alpha: 0.2), forKey: "inputColor1")
         self.eyes.setValue(CIColor(red: 1, green: 1, blue: 1, alpha: 0.0), forKey: "inputColor0")
-        self.eyes.setValue(CIColor(red: 2.0, green: 0.2, blue: 0.2, alpha: 0.5), forKey: "inputColor1")
+        self.eyes.setValue(CIColor(red: 0.2, green: 0.2, blue: 2.0, alpha: 0.5), forKey: "inputColor1")
         self.mouth.setValue(CIColor(red: 1, green: 1, blue: 1, alpha: 0.0), forKey: "inputColor0")
-        self.mouth.setValue(CIColor(red: 0.2, green: 0.2, blue: 2.0, alpha: 0.5), forKey: "inputColor1")
+        self.mouth.setValue(CIColor(red: 2.0, green: 0.2, blue: 0.2, alpha: 0.5), forKey: "inputColor1")
         //
         //        filters.append(face)
         //        filters.append(eyes)
@@ -89,7 +89,7 @@ class FaceDetectionViewController: UIViewController   {
             filterCenter.y = f.bounds.midY
             
             let f_width = f.bounds.size.width;
-            //            let f_height = f.bounds.size.height;
+            //let f_height = f.bounds.size.height;
             
             //do for each filter (assumes all filters have property, "inputCenter")
             for filt in filters{
@@ -100,19 +100,20 @@ class FaceDetectionViewController: UIViewController   {
                 retImage = filt.outputImage!
             }
             
-            //setting up the face gradient
             self.face.setValue(CIVector(cgPoint: filterCenter), forKey: "inputCenter")
             self.face.setValue(f_width/2 , forKey: "inputRadius0")
             self.face.setValue(f_width/2 - 10, forKey: "inputRadius1")
-            let combineFilter :CIFilter = CIFilter(name: "CISourceOverCompositing")!
-            combineFilter.setValue(self.face.outputImage, forKey: "inputImage")
-            combineFilter.setValue(retImage, forKey: "inputBackgroundImage")
-            retImage = combineFilter.outputImage!
             
+            //overlay filters
+            let full :CIFilter = CIFilter(name: "CISourceOverCompositing")!
+            full.setValue(self.face.outputImage, forKey: "inputImage")
+            full.setValue(retImage, forKey: "inputBackgroundImage")
+            retImage = full.outputImage!
             
             
             if (f.hasLeftEyePosition){
-                //println("Left eye: ", f.leftEyePosition.x, f.leftEyePosition.y);
+
+                //Center filter on left eye
                 filterCenter.x = f.leftEyePosition.x
                 filterCenter.y = f.leftEyePosition.y
                 self.eyes.setValue(CIVector(cgPoint: filterCenter), forKey: "inputCenter")
@@ -120,13 +121,14 @@ class FaceDetectionViewController: UIViewController   {
                 self.eyes.setValue(f_width/12 - 5, forKey: "inputRadius1")
                 
                 
-                combineFilter.setValue(self.eyes.outputImage, forKey: "inputImage")
-                combineFilter.setValue(retImage, forKey: "inputBackgroundImage")
-                retImage = combineFilter.outputImage!
+                full.setValue(self.eyes.outputImage, forKey: "inputImage")
+                full.setValue(retImage, forKey: "inputBackgroundImage")
+                retImage = full.outputImage!
             }
             
             if (f.hasRightEyePosition){
-                //println("Right eye: ", f.rightEyePosition.x, f.rightEyePosition.y);
+                
+                //Center filter on right eye
                 filterCenter.x = f.rightEyePosition.x
                 filterCenter.y = f.rightEyePosition.y
                 self.eyes.setValue(CIVector(cgPoint: filterCenter), forKey: "inputCenter")
@@ -134,14 +136,15 @@ class FaceDetectionViewController: UIViewController   {
                 self.eyes.setValue(f_width/12 - 5, forKey: "inputRadius1")
                 
                 
-                combineFilter.setValue(self.eyes.outputImage, forKey: "inputImage")
-                combineFilter.setValue(retImage, forKey: "inputBackgroundImage")
-                retImage = combineFilter.outputImage!
+                full.setValue(self.eyes.outputImage, forKey: "inputImage")
+                full.setValue(retImage, forKey: "inputBackgroundImage")
+                retImage = full.outputImage!
             }
             
             
             if (f.hasMouthPosition){
-                //print("Mouth: ", f.mouthPosition.x, f.mouthPosition.y);
+
+                //Center filter on mouth
                 filterCenter.x = f.mouthPosition.x
                 filterCenter.y = f.mouthPosition.y
                 self.mouth.setValue(CIVector(cgPoint: filterCenter), forKey: "inputCenter")
@@ -149,9 +152,9 @@ class FaceDetectionViewController: UIViewController   {
                 self.mouth.setValue(f_width/7 - 10, forKey: "inputRadius1")
                 
                 
-                combineFilter.setValue(self.mouth.outputImage, forKey: "inputImage")
-                combineFilter.setValue(retImage, forKey: "inputBackgroundImage")
-                retImage = combineFilter.outputImage!
+                full.setValue(self.mouth.outputImage, forKey: "inputImage")
+                full.setValue(retImage, forKey: "inputBackgroundImage")
+                retImage = full.outputImage!
             }
         }
         
